@@ -1,14 +1,17 @@
-const express = require("express");
+const path = require('path');
+const express = require('express');
 const dotenv = require('dotenv').config();
 const port = process.env.PORT || 5000;
 
+const app = express();
 
-app = express();
-
-// enable bodyparser
+// Enable body parser
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: false }));
 
-app.use('/openapi', require('./routes/openaiRoutes'))
+// Set static folder
+app.use(express.static(path.join(__dirname, 'src')));
 
-app.listen(port, () => console.log(`start listening on port : ${port}`));
+app.use('/openai', require('./routes/openaiRoutes'));
+
+app.listen(port, () => console.log(`Server started on port ${port}`));
